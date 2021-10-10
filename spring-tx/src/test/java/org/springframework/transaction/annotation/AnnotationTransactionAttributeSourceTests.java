@@ -122,7 +122,7 @@ public class AnnotationTransactionAttributeSourceTests {
 	}
 
 	/**
-	 * Test case where attribute is on the interface method.
+	 * Test case where attribute is on the interface method. 属性位于接口方法上的测试用例。
 	 */
 	@Test
 	public void transactionAttributeDeclaredOnInterfaceMethodOnly() throws Exception {
@@ -136,9 +136,9 @@ public class AnnotationTransactionAttributeSourceTests {
 	}
 
 	/**
-	 * Test that when an attribute exists on both class and interface, class takes precedence.
+	 * Test that when an attribute exists on both class and interface, class takes precedence. 测试当类和接口上都存在属性时，类优先。
 	 */
-	@Test
+	@Test 
 	public void transactionAttributeOnTargetClassMethodOverridesAttributeOnInterfaceMethod() throws Exception {
 		Method interfaceMethod = ITestBean3.class.getMethod("getAge");
 		Method interfaceMethod2 = ITestBean3.class.getMethod("setAge", int.class);
