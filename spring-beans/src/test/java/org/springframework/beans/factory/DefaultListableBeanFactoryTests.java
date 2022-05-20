@@ -107,7 +107,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 /**
- * Tests properties population and autowire behavior.
+ * Tests properties population and autowire behavior. 测试属性填充和自动装配行为
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -124,11 +124,15 @@ class DefaultListableBeanFactoryTests {
 
 	@Test
 	void unreferencedSingletonWasInstantiated() {
+		//清除实例化记录
 		KnowsIfInstantiated.clearInstantiationRecord();
 		Properties p = new Properties();
 		p.setProperty("x1.(class)", KnowsIfInstantiated.class.getName());
 		assertThat(!KnowsIfInstantiated.wasInstantiated()).as("singleton not instantiated").isTrue();
+		//注册 Bean 定义
 		registerBeanDefinitions(p);
+
+		//预实例化单例
 		lbf.preInstantiateSingletons();
 		assertThat(KnowsIfInstantiated.wasInstantiated()).as("singleton was instantiated").isTrue();
 	}
