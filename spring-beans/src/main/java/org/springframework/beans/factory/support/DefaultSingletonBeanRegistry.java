@@ -73,13 +73,15 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	/** Maximum number of suppressed exceptions to preserve. */
 	private static final int SUPPRESSED_EXCEPTIONS_LIMIT = 100;
 
-
+	/** 第1级缓存 用于存放 已经属性赋值、完成初始化的 单列BEAN */
 	/** Cache of singleton objects: bean name to bean instance. */
 	private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);
 
+	/** 第3级缓存 存储创建单例BEAN的工厂 */
 	/** Cache of singleton factories: bean name to ObjectFactory. */
 	private final Map<String, ObjectFactory<?>> singletonFactories = new HashMap<>(16);
 
+	/** 第2级缓存 用于存在已经实例化，还未做代理属性赋值操作的 单例BEAN */
 	/** Cache of early singleton objects: bean name to bean instance. */
 	private final Map<String, Object> earlySingletonObjects = new ConcurrentHashMap<>(16);
 
@@ -187,6 +189,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 					// Consistent creation of early reference within full singleton lock
 					singletonObject = this.singletonObjects.get(beanName);
 					if (singletonObject == null) {
+						// 第3级缓存  在doCreateBean中创建了bean的实例后，封装ObjectFactory放入缓存的bean实例
 						singletonObject = this.earlySingletonObjects.get(beanName);
 						if (singletonObject == null) {
 							ObjectFactory<?> singletonFactory = this.singletonFactories.get(beanName);
