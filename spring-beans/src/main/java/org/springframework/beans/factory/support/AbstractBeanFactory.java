@@ -252,7 +252,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		String beanName = transformedBeanName(name);
 		Object beanInstance;
 
-		// Eagerly check singleton cache for manually registered singletons. 急切地检查单例缓存以获取手动注册的单例。
+		// Eagerly check singleton cache for manually registered singletons. 检查单例缓存以获取已手动注册的单例。
 		Object sharedInstance = getSingleton(beanName);
 		if (sharedInstance != null && args == null) {
 			if (logger.isTraceEnabled()) {
@@ -264,6 +264,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					logger.trace("Returning cached instance of singleton bean '" + beanName + "'");
 				}
 			}
+			//获取给定 bean 实例的对象，bean 实例本身或(如果是 FactoryBean)其创建的对象
 			beanInstance = getObjectForBeanInstance(sharedInstance, name, beanName, null);
 		}
 
@@ -1836,6 +1837,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	/**
 	 * Get the object for the given bean instance, either the bean
 	 * instance itself or its created object in case of a FactoryBean.
+	 * 获取给定 bean 实例的对象，bean 实例本身或其创建的对象（如果是 FactoryBean）
 	 * @param beanInstance the shared bean instance
 	 * @param name the name that may include factory dereference prefix
 	 * @param beanName the canonical bean name

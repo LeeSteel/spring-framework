@@ -121,7 +121,9 @@ class DefaultListableBeanFactoryTests {
 
 	private DefaultListableBeanFactory lbf = new DefaultListableBeanFactory();
 
-
+	/**
+	 * 未引用的单例被实例化 测试
+	 */
 	@Test
 	void unreferencedSingletonWasInstantiated() {
 		//清除实例化记录
@@ -136,7 +138,9 @@ class DefaultListableBeanFactoryTests {
 		lbf.preInstantiateSingletons();
 		assertThat(KnowsIfInstantiated.wasInstantiated()).as("singleton was instantiated").isTrue();
 	}
-
+	/**
+	 * 懒初始化 测试
+	 */
 	@Test
 	void lazyInitialization() {
 		KnowsIfInstantiated.clearInstantiationRecord();
@@ -2156,6 +2160,9 @@ class DefaultListableBeanFactoryTests {
 		assertThat(tb.getSpouse()).isEqualTo(spouse);
 	}
 
+	/**
+	 *    循环依赖 测试
+	 */
 	@Test
 	void extensiveCircularReference() {
 		for (int i = 0; i < 1000; i++) {
@@ -2173,6 +2180,9 @@ class DefaultListableBeanFactoryTests {
 		}
 	}
 
+	/**
+	 *   通过自动装配循环引用
+	 */
 	@Test
 	void circularReferenceThroughAutowiring() {
 		RootBeanDefinition bd = new RootBeanDefinition(ConstructorDependencyBean.class);
@@ -2182,6 +2192,9 @@ class DefaultListableBeanFactoryTests {
 				lbf::preInstantiateSingletons);
 	}
 
+	/**
+	 *   通过 FactoryBean 自动装配循环引用
+	 */
 	@Test
 	void circularReferenceThroughFactoryBeanAutowiring() {
 		RootBeanDefinition bd = new RootBeanDefinition(ConstructorDependencyFactoryBean.class);
@@ -2191,6 +2204,9 @@ class DefaultListableBeanFactoryTests {
 				lbf::preInstantiateSingletons);
 	}
 
+	/**
+	 * 通过 FactoryBean 类型检查循环引用
+	 */
 	@Test
 	void circularReferenceThroughFactoryBeanTypeCheck() {
 		RootBeanDefinition bd = new RootBeanDefinition(ConstructorDependencyFactoryBean.class);
@@ -2200,6 +2216,9 @@ class DefaultListableBeanFactoryTests {
 				lbf.getBeansOfType(String.class));
 	}
 
+	/**
+	 * 通过自动装配避免循环引用
+	 */
 	@Test
 	void avoidCircularReferenceThroughAutowiring() {
 		RootBeanDefinition bd = new RootBeanDefinition(ConstructorDependencyFactoryBean.class);
