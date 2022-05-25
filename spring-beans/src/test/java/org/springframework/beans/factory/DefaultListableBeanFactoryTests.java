@@ -122,7 +122,7 @@ class DefaultListableBeanFactoryTests {
 	private DefaultListableBeanFactory lbf = new DefaultListableBeanFactory();
 
 	/**
-	 * 未引用的单例被实例化 测试
+	 * 未引用的单例被实例化
 	 */
 	@Test
 	void unreferencedSingletonWasInstantiated() {
@@ -130,16 +130,18 @@ class DefaultListableBeanFactoryTests {
 		KnowsIfInstantiated.clearInstantiationRecord();
 		Properties p = new Properties();
 		p.setProperty("x1.(class)", KnowsIfInstantiated.class.getName());
+		//此时未初始化, KnowsIfInstantiated的 instantiated值 为false
 		assertThat(!KnowsIfInstantiated.wasInstantiated()).as("singleton not instantiated").isTrue();
 		//注册 Bean 定义
 		registerBeanDefinitions(p);
 
 		//预实例化单例
 		lbf.preInstantiateSingletons();
+		//此时已初始化,调用了KnowsIfInstantiated的无参构造方法,修改了 instantiated的 值
 		assertThat(KnowsIfInstantiated.wasInstantiated()).as("singleton was instantiated").isTrue();
 	}
 	/**
-	 * 懒初始化 测试
+	 * 懒初始化
 	 */
 	@Test
 	void lazyInitialization() {
@@ -151,12 +153,16 @@ class DefaultListableBeanFactoryTests {
 		registerBeanDefinitions(p);
 		assertThat(!KnowsIfInstantiated.wasInstantiated()).as("singleton not instantiated").isTrue();
 		lbf.preInstantiateSingletons();
-
+		//此时未初始化, KnowsIfInstantiated的 instantiated值 为false
 		assertThat(!KnowsIfInstantiated.wasInstantiated()).as("singleton not instantiated").isTrue();
 		lbf.getBean("x1");
+		//此时已初始化,调用了KnowsIfInstantiated的无参构造方法,修改了 instantiated的 值
 		assertThat(KnowsIfInstantiated.wasInstantiated()).as("singleton was instantiated").isTrue();
 	}
 
+	/**
+	 * factory Bean 没有创建原型
+	 */
 	@Test
 	void factoryBeanDidNotCreatePrototype() {
 		Properties p = new Properties();
