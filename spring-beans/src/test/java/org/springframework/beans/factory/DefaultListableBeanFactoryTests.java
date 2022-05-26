@@ -161,7 +161,7 @@ class DefaultListableBeanFactoryTests {
 	}
 
 	/**
-	 * factory Bean 没有创建原型
+	 * factory Bean 未创建原型
 	 */
 	@Test
 	void factoryBeanDidNotCreatePrototype() {
@@ -174,9 +174,11 @@ class DefaultListableBeanFactoryTests {
 		registerBeanDefinitions(p);
 		assertThat(!DummyFactory.wasPrototypeCreated()).as("prototype not instantiated").isTrue();
 		assertThat(lbf.getType("x1")).isEqualTo(TestBean.class);
+		//这里只初始化单例bean, 未创建 x1
 		lbf.preInstantiateSingletons();
 
 		assertThat(!DummyFactory.wasPrototypeCreated()).as("prototype not instantiated").isTrue();
+		//调用getBean时, 创建 原型模式的bean x1
 		lbf.getBean("x1");
 		assertThat(lbf.getType("x1")).isEqualTo(TestBean.class);
 		assertThat(lbf.containsBean("x1")).isTrue();
@@ -600,6 +602,9 @@ class DefaultListableBeanFactoryTests {
 		assertThat(self.getDoctor()).isEqualTo(lbf.getBean("doc"));
 	}
 
+	/**
+	 * 按类型引用
+	 */
 	@Test
 	void referenceByType() {
 		MutablePropertyValues pvs = new MutablePropertyValues();
@@ -608,7 +613,11 @@ class DefaultListableBeanFactoryTests {
 		bd.setPropertyValues(pvs);
 		lbf.registerBeanDefinition("self", bd);
 		lbf.registerBeanDefinition("doc", new RootBeanDefinition(NestedTestBean.class));
-
+		/**
+		 * getBean 时会创建并初始化self对象, 在填充self属性的时候,
+		 * 通过resolveNamedBean 获取类型为 NestedTestBean的 bean.
+		 *
+		 */
 		TestBean self = (TestBean) lbf.getBean("self");
 		assertThat(self.getDoctor()).isEqualTo(lbf.getBean("doc"));
 	}

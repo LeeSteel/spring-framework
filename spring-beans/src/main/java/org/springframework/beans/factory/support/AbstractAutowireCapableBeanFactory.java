@@ -595,10 +595,12 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			addSingletonFactory(beanName, () -> getEarlyBeanReference(beanName, mbd, bean));
 		}
 
-		// Initialize the bean instance.
+		// Initialize the bean instance. 初始化 bean 实例。
 		Object exposedObject = bean;
 		try {
+			// 填充 Bean 属性 。使用 bean 定义中的属性值填充给定 BeanWrapper 中的 bean 实例。
 			populateBean(beanName, mbd, instanceWrapper);
+			// 初始化 Bean。 初始化给定的 bean 实例，应用工厂回调以及 init 方法和 bean 后处理器。
 			exposedObject = initializeBean(beanName, exposedObject, mbd);
 		}
 		catch (Throwable ex) {
