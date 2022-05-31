@@ -615,7 +615,7 @@ class DefaultListableBeanFactoryTests {
 		lbf.registerBeanDefinition("doc", new RootBeanDefinition(NestedTestBean.class));
 		/**
 		 * getBean 时会创建并初始化self对象, 在填充self属性的时候,
-		 * 通过resolveNamedBean 获取类型为 NestedTestBean的 bean.
+		 * 通过 beanFactory.resolveNamedBean 获取类型为 NestedTestBean的 bean.
 		 *
 		 */
 		TestBean self = (TestBean) lbf.getBean("self");
